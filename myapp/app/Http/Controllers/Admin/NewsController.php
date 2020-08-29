@@ -10,7 +10,6 @@ class NewsController extends Controller
 {
     public function add()
     {
-        extract(\Psy\Shell::debug(get_defined_vars()));
         return view('admin.news.create');
     }
 
@@ -33,10 +32,22 @@ class NewsController extends Controller
         unset($form['image']);
         // データベースに保存する
         $news->fill($form);
-        dd($news);
         $news->save();
 
         // admin/news/createにリダイレクトする
-        return redirect('admin/news/create');
+        return redirect('admin/news');
+    }
+
+    public function index(Request $request)
+    {
+        $cond_title = $request->cond_title;
+        if ($cond_title != '') {
+            // 検索されたら検索結果を取得する
+            $posts = News::where('title', $cond_title)->get();
+        } else {
+            // それ以外はすべてのニュースを取得する
+            $posts = News::all();
+        }
+        return view('admin.news.index', ['posts' => $posts, 'cond_title' => $cond_title]);
     }
 }
