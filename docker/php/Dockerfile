@@ -27,6 +27,10 @@ WORKDIR /var/www
 
 RUN composer global require "laravel/installer"
 
-RUN apt-get install -y gnupg
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get install -y nodejs
+#RUN apt-get install -y gnupg
+#RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+#RUN apt-get install -y nodejs
+
+# debug ツール
+#RUN composer require --dev barryvdh/laravel-debugbar
+#RUN php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"

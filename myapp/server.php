@@ -1,5 +1,5 @@
 <?php
-
+define('STDIN', fopen('php://stdin', 'r'));
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
