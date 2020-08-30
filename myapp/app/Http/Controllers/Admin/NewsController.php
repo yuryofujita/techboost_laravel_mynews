@@ -15,7 +15,14 @@ class NewsController extends Controller
 
     public function create(Request $request)
     {
+        //フォームの内容を書き換える場合
+        // $request->merge(['title(タイトル)'=>$request->input('title')]);
+        // $request->merge(['body(本文)'=>$request->input('body')]);
+        // $request->request->remove('title');
+        // $request->request->remove('body');
+
         $this->validate($request, News::$rules);
+
         $news = new News;
         $form = $request->all();
         // フォームから画像が送信されてきたら、保存して、$news->image_path に画像のパスを保存する
