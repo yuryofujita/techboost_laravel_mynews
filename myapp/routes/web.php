@@ -15,6 +15,13 @@
 //     return view('welcome');
 // });
 
+Route::get('/news_test/{id}', function ($id) {
+    $a = App\News::find($id)->histories;
+    dd($a);
+    return "";
+});
+
+
 // Route::group(['prefix' => 'admin'], function() {
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     Route::get('news/create', 'Admin\NewsController@add');
