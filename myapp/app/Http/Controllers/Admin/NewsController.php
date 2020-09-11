@@ -107,6 +107,12 @@ class NewsController extends Controller
         $news = News::find($request->id);
         // 削除する
         $news->delete();
+
+        //[追加]紐づくhistoriesもdelete
+        History::where('news_id', $request->id)->delete();
+
+        //TODO:画像も削除できた方がbetter
+
         return redirect('admin/news/');
     }
 }
