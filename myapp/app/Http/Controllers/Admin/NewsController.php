@@ -24,6 +24,8 @@ class NewsController extends Controller
         // $request->request->remove('body');
 
         $this->validate($request, News::$rules);
+        //test追加
+        echo "test1tuika";
 
         $news = new News;
         $form = $request->all();
