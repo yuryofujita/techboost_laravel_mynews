@@ -54,6 +54,12 @@
 
             <main class="py-4">
                 {{-- コンテンツをここに入れるため、@yieldで空けておきます。 --}}
+                @if (Session::has('flash_message'))
+                    <p class="bg-success">{!! Session::get('flash_message') !!}</p>
+                @endif
+                @if (Session::has('error_message'))
+                    <p class="bg-danger">{!! Session::get('error_message') !!}</p>
+                @endif
                 @yield('content')
             </main>
         </div>

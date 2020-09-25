@@ -60,11 +60,17 @@ class NewsController extends Controller
         } else {
             // それ以外はすべてのニュースを取得する
             $posts = News::all();
+
+            $this->test_oya();
         }
         return view('admin.news.index', ['posts' => $posts, 'cond_title' => $cond_title]);
     }
-    // 以下を追記
 
+    private function getNews() {
+        return News::all();
+    }
+
+    // 以下を追記
     public function edit(Request $request)
     {
         // News Modelからデータを取得する
@@ -93,13 +99,24 @@ class NewsController extends Controller
         }
         unset($news_form['_token']);
         // 該当するデータを上書きして保存する
-        $news->fill($news_form)->save();
 
-        $history = new History;
-        $history->news_id = $news->id;
-        $history->edited_at = Carbon::now();
-        $history->save();
+        \DB::beginTransaction();    //トランザクション開始
+        try {
+            $news->fill($news_form)->save();
 
+            $history = new History;
+            $history->news_id = $news->id;
+            $history->edited_at = Carbon::now();
+            $history->save();
+            // throw new \Exception('意図的にエラー');
+            \DB::commit();    //DB更新を反映
+        } catch (\Exception $e) {
+            \DB::rollback();    //DB更新を反映しない
+            \Session::flash('error_message', $e->getMessage());
+            return redirect('admin/news/edit?id='.$news->id);
+        }
+
+        \Session::flash('flash_message', '更新に成功しました。');
         return redirect('admin/news');
     }
 
