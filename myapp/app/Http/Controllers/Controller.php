@@ -14,6 +14,7 @@ class Controller extends BaseController
     protected function test_oya() {
         //dd(12121);
         // \App\News::all();
+        \Log::debug("親メソッドの中を通っている。");
         echo "";
     }
 }

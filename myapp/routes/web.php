@@ -17,8 +17,15 @@
 
 Route::get('/news_test/{id}', function ($id) {
     $a = App\News::find($id)->histories;
-    dd($a);
-    return "";
+    // dd($a);
+    return $a;
+});
+
+Route::get('/about', function () {
+    $user = new App\User();
+    $ruesult = $user->selectUser();
+    dd($ruesult);
+    return $ruesult;
 });
 
 

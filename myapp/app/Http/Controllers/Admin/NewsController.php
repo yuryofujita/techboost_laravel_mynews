@@ -28,6 +28,7 @@ class NewsController extends Controller
         echo "test1tuika";
 
         $news = new News;
+        // dd($request);
         $form = $request->all();
         // フォームから画像が送信されてきたら、保存して、$news->image_path に画像のパスを保存する
         if (isset($form['image'])) {
@@ -51,6 +52,9 @@ class NewsController extends Controller
 
     public function index(Request $request)
     {
+        //セッション格納
+        //session()->put(['name' => '氏名', 'address' => '東京']);
+        //dd(session()->all());
         $cond_title = $request->cond_title;
         if ($cond_title != '') {
             // 検索されたら検索結果を取得する
@@ -61,6 +65,8 @@ class NewsController extends Controller
             // それ以外はすべてのニュースを取得する
             $posts = News::all();
 
+            \Log::debug($posts);
+            //親クラスのメソッドを呼び出し
             $this->test_oya();
         }
         return view('admin.news.index', ['posts' => $posts, 'cond_title' => $cond_title]);
@@ -108,7 +114,9 @@ class NewsController extends Controller
             $history->news_id = $news->id;
             $history->edited_at = Carbon::now();
             $history->save();
-            // throw new \Exception('意図的にエラー');
+            if (true) {
+                throw new \Exception('意図的にエラー');
+            }
             \DB::commit();    //DB更新を反映
         } catch (\Exception $e) {
             \DB::rollback();    //DB更新を反映しない
