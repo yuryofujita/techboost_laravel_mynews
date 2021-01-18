@@ -1,5 +1,46 @@
 @extends('layouts.admin')
 @section('title', 'ニュースの編集')
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(function() {
+  //テキストボックスのフォーカスが外れたら発動
+  $('input[type="text"]').blur(function() {
+      edit_ajax();
+  });
+  $('textarea').blur(function() {
+      edit_ajax();
+  });
+  function edit_ajax() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    });
+    param = location.search;
+    param_id = param.replace(/[^0-9]/g, '');
+    $.ajax({
+        //POST通信
+        type: "POST",
+        //ここでデータの送信先URLを指定します。
+        url: "http://localhost/admin/news/update_ajax",
+        data: {
+            id:param_id,
+            title: $("#title").val(),
+            body: $("#body").val(),
+        },
+        //処理が成功したら
+        success : function(data) {
+            //HTMLファイル内の該当箇所にレスポンスデータを追加する場合
+            console.log("更新成功しました。");
+        },
+        //処理がエラーであれば
+        error : function() {
+            alert('通信エラー');
+        }
+    });
+  }
+});
+</script>
 
 @section('content')
     <div class="container">
@@ -17,13 +58,13 @@
                     <div class="form-group row">
                         <label class="col-md-2" for="title">タイトル</label>
                         <div class="col-md-10">
-                            <input type="text" class="form-control" name="title" value="{{ $news_form->title }}">
+                            <input type="text" class="form-control" id="title" class="event" name="title" value="{{ $news_form->title }}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-2" for="body">本文</label>
                         <div class="col-md-10">
-                            <textarea class="form-control" name="body" rows="20">{{ $news_form->body }}</textarea>
+                            <textarea class="form-control" id="body" class="event" name="body" rows="20">{{ $news_form->body }}</textarea>
                         </div>
                     </div>
                     <div class="form-group row">

@@ -15,6 +15,7 @@ class NewsController extends Controller
         return view('admin.news.create');
     }
 
+    private $hoge = 1;
     public function create(Request $request)
     {
         //フォームの内容を書き換える場合
@@ -55,6 +56,7 @@ class NewsController extends Controller
         //セッション格納
         //session()->put(['name' => '氏名', 'address' => '東京']);
         //dd(session()->all());
+       
         $cond_title = $request->cond_title;
         if ($cond_title != '') {
             // 検索されたら検索結果を取得する
@@ -69,6 +71,7 @@ class NewsController extends Controller
             //親クラスのメソッドを呼び出し
             $this->test_oya();
         }
+        $aaa = $this->getNews($this->hoge);
         return view('admin.news.index', ['posts' => $posts, 'cond_title' => $cond_title]);
     }
 
@@ -114,7 +117,7 @@ class NewsController extends Controller
             $history->news_id = $news->id;
             $history->edited_at = Carbon::now();
             $history->save();
-            if (true) {
+            if (false) {
                 throw new \Exception('意図的にエラー');
             }
             \DB::commit();    //DB更新を反映
@@ -126,6 +129,15 @@ class NewsController extends Controller
 
         \Session::flash('flash_message', '更新に成功しました。');
         return redirect('admin/news');
+    }
+
+    //編集画面のajax可
+    public function update_ajax(Request $request)
+    {
+        \Log::debug($request);
+        $news = News::find($request->id);
+        $news_form = $request->all();
+        $news->fill($news_form)->save();
     }
 
     public function delete(Request $request)

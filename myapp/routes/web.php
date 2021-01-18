@@ -15,6 +15,12 @@
 //     return view('welcome');
 // });
 
+Route::get('/news_all', function () {
+    $a = App\News::all()->toArray();
+    // dd($a);
+    return $a;
+});
+
 Route::get('/news_test/{id}', function ($id) {
     $a = App\News::find($id)->histories;
     // dd($a);
@@ -36,6 +42,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     Route::get('news', 'Admin\NewsController@index');
     Route::get('news/edit', 'Admin\NewsController@edit');
     Route::post('news/edit', 'Admin\NewsController@update');
+    Route::post('news/update_ajax', 'Admin\NewsController@update_ajax');
     Route::get('news/delete', 'Admin\NewsController@delete');
 
     Route::get('profile/create', 'Admin\ProfileController@add');
